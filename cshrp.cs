@@ -13,49 +13,71 @@ namespace Calculator
             {
                 try
                 {
-                    // Ввод первого числа
                     Console.Write("Введите первое число: ");
                     string input1 = Console.ReadLine();
-                    
-                    if (input1.ToLower() == "q")
+
+                    if (string.IsNullOrWhiteSpace(input1))
+                    {
+                        Console.WriteLine("\nОшибка: ввод не может быть пустым. Попробуйте снова.\n");
+                        continue;
+                    }
+
+                    if (input1.Equals("q", StringComparison.OrdinalIgnoreCase))
                     {
                         Console.WriteLine("Программа завершена.");
                         break;
                     }
 
-                    double num1 = Convert.ToDouble(input1);
+                    if (!double.TryParse(input1, out double num1))
+                    {
+                        Console.WriteLine("\nОшибка: введено некорректное число. Попробуйте снова.\n");
+                        continue;
+                    }
 
-                    // Ввод второго числа
                     Console.Write("Введите второе число: ");
                     string input2 = Console.ReadLine();
-                    
-                    if (input2.ToLower() == "q")
+
+                    if (string.IsNullOrWhiteSpace(input2))
+                    {
+                        Console.WriteLine("\nОшибка: ввод не может быть пустым. Попробуйте снова.\n");
+                        continue;
+                    }
+
+                    if (input2.Equals("q", StringComparison.OrdinalIgnoreCase))
                     {
                         Console.WriteLine("Программа завершена.");
                         break;
                     }
 
-                    double num2 = Convert.ToDouble(input2);
+                    if (!double.TryParse(input2, out double num2))
+                    {
+                        Console.WriteLine("\nОшибка: введено некорректное число. Попробуйте снова.\n");
+                        continue;
+                    }
 
-                    // Выбор операции
                     Console.WriteLine("\nВыберите операцию:");
                     Console.WriteLine("1. Сложение (+)");
                     Console.WriteLine("2. Вычитание (-)");
                     Console.WriteLine("3. Умножение (*)");
                     Console.WriteLine("4. Деление (/)");
                     Console.Write("Введите номер операции или знак: ");
-                    
+
                     string operation = Console.ReadLine();
-                    
-                    if (operation.ToLower() == "q")
+
+                    if (string.IsNullOrWhiteSpace(operation))
+                    {
+                        Console.WriteLine("\nОшибка: операция не может быть пустой.\n");
+                        continue;
+                    }
+
+                    if (operation.Equals("q", StringComparison.OrdinalIgnoreCase))
                     {
                         Console.WriteLine("Программа завершена.");
                         break;
                     }
 
-                    // Выполнение операции и вывод результата
                     double result = 0;
-                    bool validOperation = true;
+                    bool hasResult = true;
 
                     switch (operation)
                     {
@@ -64,24 +86,25 @@ namespace Calculator
                             result = num1 + num2;
                             Console.WriteLine($"\nРезультат: {num1} + {num2} = {result}");
                             break;
-                        
+
                         case "2":
                         case "-":
                             result = num1 - num2;
                             Console.WriteLine($"\nРезультат: {num1} - {num2} = {result}");
                             break;
-                        
+
                         case "3":
                         case "*":
                             result = num1 * num2;
                             Console.WriteLine($"\nРезультат: {num1} * {num2} = {result}");
                             break;
-                        
+
                         case "4":
                         case "/":
                             if (num2 == 0)
                             {
                                 Console.WriteLine("\nОшибка: деление на ноль невозможно!");
+                                hasResult = false;
                             }
                             else
                             {
@@ -89,23 +112,19 @@ namespace Calculator
                                 Console.WriteLine($"\nРезультат: {num1} / {num2} = {result}");
                             }
                             break;
-                        
+
                         default:
-                            validOperation = false;
                             Console.WriteLine("\nОшибка: неверная операция!");
+                            hasResult = false;
                             break;
                     }
 
-                    if (validOperation && operation != "/" || (operation == "/" && num2 != 0))
+                    if (hasResult)
                     {
-                        Console.WriteLine($"Результат (с округлением до 2 знаков): {Math.Round(result, 2)}");
+                        Console.WriteLine($"Результат с округлением до 2 знаков: {Math.Round(result, 2)}");
                     }
-                    
+
                     Console.WriteLine("\n" + new string('-', 30) + "\n");
-                }
-                catch (FormatException)
-                {
-                    Console.WriteLine("\nОшибка: введено некорректное число! Попробуйте снова.\n");
                 }
                 catch (Exception ex)
                 {
